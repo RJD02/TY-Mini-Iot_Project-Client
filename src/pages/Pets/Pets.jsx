@@ -23,9 +23,12 @@ const Pets = () => {
   }, []);
 
   return (
-    <div className="d-flex">
+    <div className="d-flex flex-column flex-md-row">
       {pets.map((pet, index) => (
-        <div className={index === 0 ? "m3-2" : "mx-2"} key={pet._id}>
+        <div
+          className={`${index === 0 ? "me3-2 mt-2" : "mx-2"} my-3`}
+          key={pet._id}
+        >
           <Pet
             petID={pet._id}
             petType={pet.petType}
