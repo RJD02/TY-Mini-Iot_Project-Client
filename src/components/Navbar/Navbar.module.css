@@ -1,0 +1,9 @@
+.navbar {
+  height: 10vh;
+  width: 100%;
+}
+
+.navbar .navbar-brand {
+  font-style: oblique;
+  font-weight: bold;
+}
