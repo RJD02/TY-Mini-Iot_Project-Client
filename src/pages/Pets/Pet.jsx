@@ -8,12 +8,18 @@ import {
   CardContent,
   Snackbar,
   Typography,
+  TextField,
 } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import axios from "axios";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 const Pet = (props) => {
   const [feedClicked, setFeedClicked] = useState(false);
   const [message, setMessage] = useState("");
+  const [schedulingDate, setSchedulingDate] = useState(new Date());
+  const [schedulingSet, setSchedulingSet] = useState(false);
   const { petID, petType, latestRequest, lastFed } = props;
 
   console.log(moment(lastFed).fromNow());
@@ -28,8 +34,10 @@ const Pet = (props) => {
     setFeedClicked(true);
     const data = await axios.post(
       "https://pet-feeder-iot.herokuapp.com/pet/feedNow",
+      // "http://localhost:7000/pet/feedNow",
       {
         petID,
+        scheduledTime: schedulingSet ? schedulingDate : null,
       },
       {
         headers: {
@@ -39,6 +47,11 @@ const Pet = (props) => {
     );
     console.log(data.data);
     setMessage(data.data.message);
+  };
+
+  const scheduleChangeHandler = (value) => {
+    setSchedulingDate(value);
+    setSchedulingSet(true);
   };
 
   return (
@@ -66,6 +79,16 @@ const Pet = (props) => {
           >
             {feedClicked || latestRequest ? "Feeding..." : "Feed"}
           </Button>
+          <div>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DateTimePicker
+                label="Date-Time Picker"
+                value={schedulingDate}
+                onChange={scheduleChangeHandler}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
         </CardActions>
       </Card>
       <Snackbar
