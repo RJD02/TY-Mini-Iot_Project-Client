@@ -77,7 +77,10 @@ const Pet = (props) => {
             onClick={onFeedHandler}
             disabled={feedClicked || latestRequest ? true : false}
           >
-            {feedClicked || latestRequest ? "Feeding..." : "Feed"}
+            {(feedClicked || latestRequest) &&
+            !(new Date.now() < schedulingDate.getTime())
+              ? "Feeding..."
+              : "Feed"}
           </Button>
           <div>
             <LocalizationProvider dateAdapter={AdapterMoment}>
